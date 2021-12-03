@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity{
             Bitmap bitmap = null;
             int width = rawbitmap.getWidth();
             int height = rawbitmap.getHeight();
-            bitmap = Bitmap.createBitmap(rawbitmap, 0, (height-width)/2, width, width);
+            bitmap = Bitmap.createBitmap(rawbitmap, (width-height)/2, 0, height, height);
             bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
             //Input Tensor
             final Tensor input = TensorImageUtils.bitmapToFloat32Tensor(
@@ -64,9 +64,9 @@ public class MainActivity extends AppCompatActivity{
             final Tensor output = module_depth.forward(IValue.from(input)).toTensor();
             final float[] deptharray = output.getDataAsFloatArray();
             Bitmap depthbitmap = arrayFlotToBitmap(deptharray, 224, 224);
-            final Bitmap finaldepthbitmap = Bitmap.createScaledBitmap(depthbitmap, width, width, true);
 
-            //
+            Bitmap finaldepthbitmap = Bitmap.createScaledBitmap(depthbitmap, width, height,true);
+
             ((ImageView) findViewById(R.id.result_image)).setImageBitmap(finaldepthbitmap);
         }
         else{
