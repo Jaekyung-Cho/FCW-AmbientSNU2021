@@ -108,15 +108,15 @@ public class MainActivity extends AppCompatActivity{
             /*..권한이 있는경우 실행할 코드....*/
             setContentView(R.layout.activity_main);
 
-            Button buttonLoadImage = (Button) findViewById(R.id.button);
-            Button detectButton = (Button) findViewById(R.id.detect);
-            Button autofocusButton = (Button) findViewById(R.id.autofocus);
+            Button loadModelButton = (Button) findViewById(R.id.loadModel_btn);
+            Button detectButton = (Button) findViewById(R.id.detect_btn);
+            Button autofocusButton = (Button) findViewById(R.id.autofocus_btn);
 
             SurfaceView mCameraView = (SurfaceView) findViewById(R.id.cameraView);
             cameraSurfaceView = new CameraSurfaceView(this);
             cameraSurfaceView.init(mCameraView);
 
-            buttonLoadImage.setOnClickListener(new View.OnClickListener() {
+            loadModelButton.setOnClickListener(new View.OnClickListener() {
 
 
                 @Override

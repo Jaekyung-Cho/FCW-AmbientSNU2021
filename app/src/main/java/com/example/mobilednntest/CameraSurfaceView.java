@@ -82,7 +82,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
         parameters.setPreviewSize(640, 360);
 //        parameters.setPreviewFpsRange(10000,10000);
         mCamera.setParameters(parameters);
-        mCamera.setDisplayOrientation(90);
+        //mCamera.setDisplayOrientation(90);
 
         // surfaceview setting
         mCameraView = surfaceView;
