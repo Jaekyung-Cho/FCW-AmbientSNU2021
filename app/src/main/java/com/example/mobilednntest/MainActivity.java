@@ -42,17 +42,20 @@ public class MainActivity extends AppCompatActivity{
     Module module_detection = null; // detection 모델
     Module module_depth = null; // depth 모델
     private Bitmap raw_bitmap;
+    public boolean depth_flag = true;
 
     //
     public void depthShow(Bitmap rawbitmap){
         if (module_depth != null) {
+            depth_flag = false;
             ((TextView) findViewById(R.id.depth_text)).setText("");
             raw_bitmap = rawbitmap;
             Bitmap bitmap = null;
             int width = rawbitmap.getWidth();
             int height = rawbitmap.getHeight();
-            bitmap = Bitmap.createBitmap(rawbitmap, (width-height)/2, 0, height, height);
-            bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
+//            System.out.printf("%d %d\n", width, height);
+            bitmap = Bitmap.createBitmap(rawbitmap, 0, 84, 360, 192);
+            bitmap = Bitmap.createScaledBitmap(bitmap, 360, 192, true);
             //Input Tensor
             final Tensor input = TensorImageUtils.bitmapToFloat32Tensor(
                     bitmap,
@@ -61,13 +64,16 @@ public class MainActivity extends AppCompatActivity{
             );
 
             //Calling the forward of the model to run our input
+            System.out.printf("1\n");
             final Tensor output = module_depth.forward(IValue.from(input)).toTensor();
+            System.out.printf("2\n");
             final float[] deptharray = output.getDataAsFloatArray();
-            Bitmap depthbitmap = arrayFlotToBitmap(deptharray, 224, 224);
+            Bitmap depthbitmap = arrayFlotToBitmap(deptharray, 360, 192);
 
             Bitmap finaldepthbitmap = Bitmap.createScaledBitmap(depthbitmap, width, height,true);
 
             ((ImageView) findViewById(R.id.result_image)).setImageBitmap(finaldepthbitmap);
+            depth_flag = true;
         }
         else{
             ((TextView) findViewById(R.id.depth_text)).setText("Please upload model");
@@ -125,7 +131,7 @@ public class MainActivity extends AppCompatActivity{
                         System.out.println("detection model load");
                         module_detection = Module.load(fetchModelFile(MainActivity.this, "resnet18_traced.pt"));
                         System.out.println("depth model load");
-                        module_depth = Module.load(fetchModelFile(MainActivity.this, "project_fastdepth_trace_cpu.pt"));
+                        module_depth = Module.load(fetchModelFile(MainActivity.this, "project_monodepth2_trace.pt"));
                         System.out.println("model load complete");
                     } catch (IOException e) {
                         finish();

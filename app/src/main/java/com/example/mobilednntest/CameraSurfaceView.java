@@ -57,7 +57,9 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 activity.runOnUiThread(new Runnable(){
                     @Override
                     public void run(){
-                        activity.depthShow(finalBitmap);
+                        if (activity.depth_flag) {
+                            activity.depthShow(finalBitmap);
+                        }
 //                        ((ImageView) findViewById(R.id.result_image)).setImageBitmap(finalBitmap);
                     }
                 });
@@ -79,6 +81,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
         parameters.setPreviewSize(640, 360);
 //        parameters.setPreviewFpsRange(10000,10000);
         mCamera.setParameters(parameters);
+        parameters.setPreviewFpsRange(10, 10);
         //mCamera.setDisplayOrientation(90);
 
         // surfaceview setting
