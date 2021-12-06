@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraDevice;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ImageView;
@@ -26,6 +27,8 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
     private ImageView resultimageView;
     private MainActivity activity;
 
+    private static final String TAG = "Fcw_Camera";
+
     public CameraSurfaceView(Context context) {
         super(context);
         activity = (MainActivity) context;
@@ -37,6 +40,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
             Camera.Parameters parameters = camera.getParameters();
             int imageFormat = parameters.getPreviewFormat();
             Bitmap bitmap = null;
+            Log.i(TAG, "onPreviewFrame");
 
             if (imageFormat == ImageFormat.NV21) {
                 int w = parameters.getPreviewSize().width;
@@ -71,17 +75,20 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
     // Camera 기능
     public void init(SurfaceView surfaceView){
-        System.out.println("init");
+        Log.i(TAG, "init");
         mCamera = Camera.open();
         Camera.Parameters parameters = mCamera.getParameters();
         List<String> focusModes = parameters.getSupportedFocusModes();
         if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
         }
+        for(int[] arr : parameters.getSupportedPreviewFpsRange ()){
+            Log.i(TAG, "Supported range: " + arr[0] + " - " + arr[1]);
+        }
         parameters.setPreviewSize(640, 360);
-//        parameters.setPreviewFpsRange(10000,10000);
+        parameters.setPreviewFpsRange(15000,15000);
         mCamera.setParameters(parameters);
-        parameters.setPreviewFpsRange(10, 10);
+        //parameters.setPreviewFpsRange(10, 10);
         //mCamera.setDisplayOrientation(90);
 
         // surfaceview setting
@@ -93,7 +100,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
     }
 
     public void autofocus(){
-        System.out.println("autofocus");
+        Log.i(TAG,"autofocus");
         mCamera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
             public void onAutoFocus(boolean success, Camera camera) {
@@ -104,7 +111,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
     public void surfaceCreated(SurfaceHolder holder) {
         try {
-            System.out.println("surfaceCreated");
+            Log.i(TAG,"surfaceCreated");
             if (mCamera == null) {
                 mCamera.reconnect();
                 mCamera.setPreviewDisplay(holder);
@@ -117,7 +124,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
         // View 가 존재하지 않을 때
-        System.out.println("surfaceChanged");
+        Log.i(TAG,"surfaceChanged");
         if (mCameraHolder.getSurface() == null) {
             return;
         }
@@ -153,7 +160,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
             mCamera.stopPreview();
             mCamera.release();
             mCamera = null;
-            System.out.println("release");
+            Log.i(TAG,"surfaceDestroyed");
         }
     }
 }
