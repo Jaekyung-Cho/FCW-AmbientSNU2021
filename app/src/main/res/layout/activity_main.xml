@@ -14,19 +14,17 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_weight="7">
+            android:layout_weight="4">
 
             <SurfaceView
                 android:id="@+id/cameraView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="10dp"
                 android:layout_weight="5"/>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="10dp"
                 android:layout_weight="5">
 
                 <ImageView
@@ -57,7 +55,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:orientation="vertical"
-            android:layout_weight="3">
+            android:layout_weight="4">
             <ImageView
                 android:id="@+id/BEV_image"
                 android:layout_width="match_parent"
@@ -67,9 +65,9 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:orientation="vertical"
-            android:layout_weight="3">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/result_text"
