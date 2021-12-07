@@ -103,6 +103,13 @@
                 android:text="Auto Focus"
                 android:layout_marginTop="30dp"/>
 
+            <Button
+                android:id="@+id/depth_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Depth"
+                android:layout_marginTop="30dp"/>
+
         </LinearLayout>
     </LinearLayout>
 

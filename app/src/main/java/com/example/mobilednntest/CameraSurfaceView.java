@@ -62,7 +62,8 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
                     @Override
                     public void run(){
                         if (activity.depth_flag) {
-                            activity.depthShow(finalBitmap);
+//                            activity.depthShow(finalBitmap);
+                            activity.raw_bitmap = finalBitmap;
                         }
 //                        ((ImageView) findViewById(R.id.result_image)).setImageBitmap(finalBitmap);
                     }
