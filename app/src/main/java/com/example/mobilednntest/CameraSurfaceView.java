@@ -40,9 +40,10 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
             Camera.Parameters parameters = camera.getParameters();
             int imageFormat = parameters.getPreviewFormat();
             Bitmap bitmap = null;
-            Log.i(TAG, "onPreviewFrame");
+            Log.i(TAG, "onPreviewFrame, imageFormat: "+imageFormat);
 
             if (imageFormat == ImageFormat.NV21) {
+                Log.i(TAG, "ImageFormat.NV21");
                 int w = parameters.getPreviewSize().width;
                 int h = parameters.getPreviewSize().height;
 
@@ -62,7 +63,8 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
                     @Override
                     public void run(){
                         if (activity.depth_flag) {
-                            activity.depthShow(finalBitmap);
+                            //activity.depthShow(finalBitmap);
+                            activity.runObjDetect(finalBitmap);
                         }
 //                        ((ImageView) findViewById(R.id.result_image)).setImageBitmap(finalBitmap);
                     }
@@ -76,7 +78,22 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
     // Camera 기능
     public void init(SurfaceView surfaceView){
         Log.i(TAG, "init");
-        mCamera = Camera.open();
+
+        int cameraId = -1;
+        int numberOfCameras = Camera.getNumberOfCameras();
+
+        for (int i = 0; i < numberOfCameras; i++) {
+            Camera.CameraInfo cmInfo = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, cmInfo);
+
+            if (cmInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                cameraId = i;
+                break;
+            }
+        }
+
+
+        mCamera = Camera.open(cameraId);
         Camera.Parameters parameters = mCamera.getParameters();
         List<String> focusModes = parameters.getSupportedFocusModes();
         if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {

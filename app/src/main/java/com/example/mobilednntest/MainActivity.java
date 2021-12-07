@@ -69,6 +69,46 @@ public class MainActivity extends AppCompatActivity{
     //reference : https://support.google.com/pixelphone/answer/7158570?hl=en#zippy=%2Cpixel-a
 
     //
+
+    public void runObjDetect(Bitmap raw_bitmap){
+        Bitmap bitmap = null;
+
+        //Read the image as Bitmap
+        bitmap = raw_bitmap;
+        //Here we reshape the image into 400*400
+        bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
+
+        //Input Tensor
+        final Tensor input = TensorImageUtils.bitmapToFloat32Tensor(
+                bitmap,
+                TensorImageUtils.TORCHVISION_NORM_MEAN_RGB,
+                TensorImageUtils.TORCHVISION_NORM_STD_RGB
+        );
+
+        Log.i(TAG, "Before detection inference depth");
+        //Calling the forward of the model to run our input
+        Long beforeDetectInference = System.currentTimeMillis();
+        final Tensor output = module_detection.forward(IValue.from(input)).toTensor();
+        Long aftereDetectInference = System.currentTimeMillis();
+        Log.i(TAG,"Detect Inference Time: "+(aftereDetectInference-beforeDetectInference)+"ms");
+
+        final float[] score_arr = output.getDataAsFloatArray();
+
+        // Fetch the index of the value with maximum score
+        float max_score = -Float.MAX_VALUE;
+        int ms_ix = -1;
+        for (int i = 0; i < score_arr.length; i++) {
+            if (score_arr[i] > max_score) {
+                max_score = score_arr[i];
+                ms_ix = i;
+            }
+        }
+        //Fetching the name from the list based on the index
+        String detected_class = ModelClasses.MODEL_CLASSES[ms_ix];
+
+        //TODO: If there are obj, Need to run Depth Estimation
+
+    }
     public void depthShow(Bitmap rawbitmap){
         if (module_depth != null) {
             depth_flag = false;
