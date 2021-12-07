@@ -75,8 +75,7 @@ public class MainActivity extends AppCompatActivity{
     private float FoV = 77 * (float) Math.PI / 180;
     //reference : https://support.google.com/pixelphone/answer/7158570?hl=en#zippy=%2Cpixel-a
 
-
-    public void depthShow(Bitmap rawbitmap){
+    public void runDepth(Bitmap rawbitmap){
         if (module_depth != null) {
             depth_flag = false;
             ((TextView) findViewById(R.id.depth_text)).setText("");
@@ -219,7 +218,7 @@ public class MainActivity extends AppCompatActivity{
         return res;
     }
 
-    private List<float[]> detection(Bitmap originBitmap){
+    private List<float[]> runDetection(Bitmap originBitmap){
         if (module_detection != null) {
             //Read the image as Bitmap
             Bitmap bitmap = null;
@@ -368,7 +367,7 @@ public class MainActivity extends AppCompatActivity{
 
                 @Override
                 public void onClick(View arg0) {
-                    depthShow(raw_bitmap);
+                    runDepth(raw_bitmap);
                 }
             });
         }
