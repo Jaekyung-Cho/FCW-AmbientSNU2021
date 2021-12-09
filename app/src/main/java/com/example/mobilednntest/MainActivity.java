@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity{
     private static final int SINGLE_PERMISSION = 1004; //권한 변수
     Module module_detection = null; // detection Yolo 모델
     Module module_depth = null; // depth 모델
-    Module
     public Bitmap raw_bitmap;
     public boolean depth_flag = true;
 
@@ -218,7 +217,7 @@ public class MainActivity extends AppCompatActivity{
         return res;
     }
 
-    private List<float[]> runDetection(Bitmap originBitmap){
+    public void runDetection(Bitmap originBitmap){
         if (module_detection != null) {
             //Read the image as Bitmap
             Bitmap bitmap = null;
@@ -263,6 +262,42 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    private HashMap<Integer,float[]> TDmap = new HashMap<Integer,float[]>(){{//초기값 지정
+        put(0,new float[]{17f,12f}); // Human
+        put(1,new float[]{22f,9f}); // Car
+        put(2,new float[]{24f,5f}); // Truck
+        put(3,new float[]{6f,2f}); // Bike
+        put(4,new float[]{7f,2f}); // Motor
+    }};
+    private void PixelDecision1(ArrayList<Result> bbox_list){
+        int check_x_min = 0, check_x_max = 505;
+        int check_y_min = 0, check_y_max = 192;
+        int check_zone = (check_x_max-check_x_min) * (check_y_max-check_y_min);
+        for(int i=0;i<bbox_list.; i++){
+            Result bbox = bbox_list.get(i);
+            int center_x = bbox.rect.centerX(), center_y = bbox.rect.centerY();
+            int bbox_size = bbox.rect.width() * bbox.rect.height();
+
+            // 1. check zone 에 있는지 filtering
+            if(center_x>=check_x_min && center_x<=check_x_max && center_y>=check_y_min && center_y<=check_y_max){
+                // 2. Thread Degree(TD) 계산
+                float TD = (float)bbox_size / check_zone * 100;
+
+                // 3. case별 계산
+                float x1 = TDmap.get(bbox.classIndex)[0], x2 = TDmap.get(bbox.classIndex)[1];
+                if(TD > x1){
+                    // Run Depthestimation
+                }
+                else if(TD > x2){
+                    // High framerate object detection
+                }
+                else{
+                    // Low framerate object detection
+                }
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) { // on수Create 가 가장 먼저 실행되는 함
         super.onCreate(savedInstanceState);
@@ -293,7 +328,7 @@ public class MainActivity extends AppCompatActivity{
                 public void onClick(View arg0) {
                     try {
                         Log.i(TAG, "Load Detection module");
-                        module_detection = Module.load(fetchModelFile(MainActivity.this, "resnet18_traced.pt"));
+                        module_detection = Module.load(fetchModelFile(MainActivity.this, "best_yolov5s_bdd_prew.torchscript.pt"));
                         Log.i(TAG, "Load Depth module");
                         module_depth = Module.load(fetchModelFile(MainActivity.this, "project_monodepth2_trace.pt"));
                         Log.i(TAG, "Load Completed");
