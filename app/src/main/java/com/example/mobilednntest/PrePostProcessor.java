@@ -35,8 +35,7 @@ public class PrePostProcessor {
     static int mInputHeight = 640;
 
     // [SSH] modified for BDD100K dataset
-    // model output is of size 20160*(num_of_class+5)
-    private static int mOutputRow = 20160; // as decided by the YOLOv5 model for input image of size 640*640
+    private static int mOutputRow = 25200; // as decided by the YOLOv5 model for input image of size 320*320
     private static int mOutputColumn = 18; // left, top, right, bottom, score and 13 class probability
     private static float mThreshold = 0.30f; // score above which a detection is generated
     private static int mNmsLimit = 15;
@@ -119,7 +118,6 @@ public class PrePostProcessor {
 
     static ArrayList<Result> outputsToNMSPredictions(float[] outputs, float imgScaleX, float imgScaleY, float ivScaleX, float ivScaleY, float startX, float startY) {
         ArrayList<Result> results = new ArrayList<>();
-        System.out.printf("%d\n", outputs.length);
         for (int i = 0; i< mOutputRow; i++) {
             if (outputs[i* mOutputColumn +4] > mThreshold) {
                 float x = outputs[i* mOutputColumn];

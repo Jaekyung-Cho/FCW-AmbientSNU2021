@@ -50,7 +50,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 YuvImage yuvImage = new YuvImage(data, imageFormat, w, h, null);
                 Rect rect = new Rect(0, 0, w, h);
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                yuvImage.compressToJpeg(rect, 50, outputStream);
+                yuvImage.compressToJpeg(rect, 100, outputStream);
                 bitmap = BitmapFactory.decodeByteArray(outputStream.toByteArray(), 0, outputStream.size());
             }
             else if (imageFormat == ImageFormat.JPEG || imageFormat == ImageFormat.RGB_565) {
@@ -64,8 +64,8 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
                     public void run(){
                         if (activity.depth_flag) {
                             activity.raw_bitmap = finalBitmap;
-                            activity.runDepth(finalBitmap);
-                            activity.runDetection(finalBitmap);
+//                            activity.runDepth(finalBitmap);
+//                            activity.runDetection(finalBitmap);
                         }
 //                        ((ImageView) findViewById(R.id.result_image)).setImageBitmap(finalBitmap);
                     }
