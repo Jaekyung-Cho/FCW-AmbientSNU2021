@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
@@ -40,10 +41,8 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
             Camera.Parameters parameters = camera.getParameters();
             int imageFormat = parameters.getPreviewFormat();
             Bitmap bitmap = null;
-            Log.i(TAG, "onPreviewFrame, imageFormat: "+imageFormat);
 
             if (imageFormat == ImageFormat.NV21) {
-                Log.i(TAG, "ImageFormat.NV21");
                 int w = parameters.getPreviewSize().width;
                 int h = parameters.getPreviewSize().height;
 
@@ -62,8 +61,12 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 activity.runOnUiThread(new Runnable(){
                     @Override
                     public void run(){
-                        if (activity.depth_flag) {
-                            activity.raw_bitmap = finalBitmap;
+                        if (activity.image_flag) {
+                            Matrix sideInversion = new Matrix();
+                            sideInversion.setScale(-1, 1);  // 좌우반전
+                            Bitmap flipBitmap = Bitmap.createBitmap(finalBitmap, 0, 0,
+                                    finalBitmap.getWidth(), finalBitmap.getHeight(), sideInversion, false);
+                            activity.raw_bitmap = flipBitmap;
 //                            activity.runDepth(finalBitmap);
 //                            activity.runDetection(finalBitmap);
                         }

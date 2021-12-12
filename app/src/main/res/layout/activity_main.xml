@@ -56,60 +56,17 @@
             android:layout_marginLeft="5dp"
             android:orientation="vertical"
             android:layout_weight="4">
+            <Button
+                android:id="@+id/start_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Start"
+                android:layout_marginTop="10dp"/>
             <ImageView
                 android:id="@+id/BEV_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:orientation="vertical"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/result_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text=""
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:layout_marginTop="30dp"/>
-
-            <Button
-                android:id="@+id/loadModel_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Load Model"
-                android:layout_marginTop="30dp"
-                tools:layout_editor_absoluteX="16dp" />
-
-            <Button
-                android:id="@+id/detect_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Detect"
-                android:layout_marginTop="30dp"/>
-
-            <Button
-                android:id="@+id/autofocus_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Auto Focus"
-                android:layout_marginTop="30dp"/>
-
-            <Button
-                android:id="@+id/depth_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Depth"
-                android:layout_marginTop="30dp"/>
-
         </LinearLayout>
     </LinearLayout>
 
